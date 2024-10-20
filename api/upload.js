@@ -3,16 +3,13 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.use(express.static("build"));
 app.use(express.json());
 
 app.post("/api/upload", async (req, res) => {
   const { url } = req.body;
   console.log("Url is: " + url);
-  const OPENAI_API_KEY =
-    "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";
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
   try {
     // Fetch the content of the provided URL
@@ -46,7 +43,7 @@ app.post("/api/upload", async (req, res) => {
         },
       }
     );
-    console.log("OpenAI API call successfullyy");
+    console.log("OpenAI API call successfully");
 
     // Extracted data from the ChatGPT response
     const extractedData = response.data.choices[0].message.content;
@@ -63,6 +60,4 @@ app.post("/api/upload", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = app;
