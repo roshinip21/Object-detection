@@ -11,6 +11,8 @@ app.use(express.json());
 app.post("/api/upload", async (req, res) => {
   const { url } = req.body;
   console.log("Url is: " + url);
+  const OPENAI_API_KEY =
+    "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";
 
   try {
     // Fetch the content of the provided URL
@@ -39,7 +41,7 @@ app.post("/api/upload", async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
       }
