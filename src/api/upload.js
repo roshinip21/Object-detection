@@ -46,7 +46,7 @@ app.post("/api/upload", async (req, res) => {
         },
       }
     );
-    console.log("OpenAI API call successful");
+    console.log("OpenAI API call successfully");
 
     // Extracted data from the ChatGPT response
     const extractedData = response.data.choices[0].message.content;
