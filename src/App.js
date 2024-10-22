@@ -1,5 +1,3 @@
-// src/App.js
-
 import UrlExtractor from "./components/UrlExtractor";
 
 function App() {

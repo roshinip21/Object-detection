@@ -1,28 +1,24 @@
+// src/components/UrlExtractor.js
 import { useState } from "react";
-
 export default function UrlExtractor() {
   const [url, setUrl] = useState("");
   const [extractedData, setExtractedData] = useState(null);
   const [error, setError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setExtractedData(null);
-
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch("http://localhost:3001/api/upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ url }),
       });
-
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       const data = await response.json();
       setExtractedData(data.extractedData);
     } catch (err) {
@@ -30,7 +26,6 @@ export default function UrlExtractor() {
       console.error(err);
     }
   };
-
   return (
     <div style={{ padding: "20px" }}>
       <h1>URL Data Extractor</h1>
@@ -45,7 +40,6 @@ export default function UrlExtractor() {
         />
         <button type="submit">Submit</button>
       </form>
-
       {error && <p style={{ color: "red" }}>{error}</p>}
       {extractedData && (
         <div>

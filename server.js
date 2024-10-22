@@ -3,13 +3,16 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
+const port = 3001;
+const cors = require("cors");
+app.use(cors());
+// app.use(express.static("build"));
 
 app.use(express.json());
 
 app.post("/api/upload", async (req, res) => {
   const { url } = req.body;
   console.log("Url is: " + url);
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
   try {
     // Fetch the content of the provided URL
@@ -26,11 +29,13 @@ app.post("/api/upload", async (req, res) => {
         model: "gpt-4o-mini",
         messages: [
           {
+            role: "system",
+            content:
+              "Extract the following details from the webpage content: Name, Age, Gender, Race, Date of injury resulting in death, Location of injury, Location of death, etc.",
+          },
+          {
             role: "user",
-            content: `Extract the following details from the webpage content: 
-                    Name, Age, Gender, Race, Date of injury resulting in death, 
-                    Location of injury, Location of death, etc.
-                    Webpage Content: ${pageContent}`,
+            content: `Webpage Content: ${pageContent}`,
           },
         ],
         max_tokens: 300,
@@ -38,26 +43,22 @@ app.post("/api/upload", async (req, res) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
       }
     );
-    console.log("OpenAI API call successfully");
+    console.log("OpenAI API call successful");
 
-    // Extracted data from the ChatGPT response
+    // Extracted data from the OpenAI response
     const extractedData = response.data.choices[0].message.content;
     res.status(200).json({ extractedData });
   } catch (error) {
-    console.error("Error details:", error);
-    if (error.response) {
-      console.error("Error response:", error.response.data);
-      console.error("Error status:", error.response.status);
-    }
-    res
-      .status(500)
-      .json({ error: "Error processing the URL", details: error.message });
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred" });
   }
 });
 
-module.exports = app;
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
