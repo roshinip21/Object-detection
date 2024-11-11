@@ -14,31 +14,28 @@ export default function UrlExtractor() {
     setIsLoading(true);
 
     try {
-      console.log("Sending request to API...");
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-      });
+        const response = await fetch("/api/upload", {  // Make sure this matches exactly
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url }),
+        });
 
-      console.log("Response received:", response.status);
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || "Network response was not ok");
+        }
 
-      if (!response.ok) {
-        throw new Error(errorData.error ||"Network response was not ok");
-      }
-
-      const data = await response.json();
-      console.log("Parsed data:", data);
-      setExtractedData(data.extractedData);
+        const data = await response.json();
+        setExtractedData(data.extractedData);
     } catch (err) {
-      console.error("Error details:", err);
-      setError("Failed to extract data. Please check the URL and try again.");
+        console.error("Error details:", err);
+        setError("Failed to extract data. Please check the URL and try again.");
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
   return (
     <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
