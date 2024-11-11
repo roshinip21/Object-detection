@@ -8,10 +8,7 @@
   "builds": [
     {
       "src": "api/upload.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 100
-      }
+      "use": "@vercel/node"
     },
     {
       "src": "package.json",
