@@ -1,31 +1,32 @@
-const axios = require("axios");
-require("dotenv").config();
+import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 export default async function handler(req, res) {
-    // Enable CORS
+    // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader(
         'Access-Control-Allow-Headers',
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
     );
 
-    // Handle OPTIONS request for CORS preflight
+    // Handle preflight request (OPTIONS)
     if (req.method === 'OPTIONS') {
         res.status(200).end();
         return;
     }
 
-    // Only allow POST requests
+    // Only allow POST method
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+        return res.status(405).json({ error: 'Method not allowed. Only POST requests are accepted.' });
     }
 
-    const { url } = req.body;
-    console.log("Url is: " + url);
-
     try {
+        const { url } = req.body;
+        console.log("Url is: " + url);
+
         // Fetch the content of the provided URL
         console.log("Fetching URL content...");
         const pageResponse = await axios.get(url);
@@ -66,6 +67,6 @@ export default async function handler(req, res) {
         res.status(200).json({ extractedData });
     } catch (error) {
         console.error("Error:", error);
-        res.status(500).json({ error: "An error occurred" });
+        res.status(500).json({ error: "An error occurred", details: error.message });
     }
 }

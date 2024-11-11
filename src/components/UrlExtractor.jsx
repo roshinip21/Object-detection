@@ -26,7 +26,7 @@ export default function UrlExtractor() {
       console.log("Response received:", response.status);
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error(errorData.error ||"Network response was not ok");
       }
 
       const data = await response.json();
