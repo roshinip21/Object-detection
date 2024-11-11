@@ -1,72 +1,73 @@
-import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+import axios from 'axios';
+import { config } from 'dotenv';
+config();
 
+// Export the API route handler
 export default async function handler(req, res) {
-    // Set CORS headers
+    // Handle CORS
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Handle preflight request (OPTIONS)
+    // Handle OPTIONS (preflight) request
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+        return res.status(200).end();
     }
 
-    // Only allow POST method
+    // Only allow POST requests
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed. Only POST requests are accepted.' });
+        return res.status(405).json({ 
+            error: `Method ${req.method} Not Allowed. Only POST requests are accepted.` 
+        });
     }
 
     try {
         const { url } = req.body;
-        console.log("Url is: " + url);
+        if (!url) {
+            return res.status(400).json({ error: 'URL is required' });
+        }
 
-        // Fetch the content of the provided URL
-        console.log("Fetching URL content...");
+        console.log("Processing URL:", url);
+
+        // Fetch webpage content
         const pageResponse = await axios.get(url);
         const pageContent = pageResponse.data;
-        console.log("URL content fetched successfully");
 
-        console.log("Calling OpenAI API...");
-        // Call the OpenAI API with the content of the webpage
-        const response = await axios.post(
-            "https://api.openai.com/v1/chat/completions",
+        // Call OpenAI API
+        const openaiResponse = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
             {
-                model: "gpt-4o-mini",
+                model: "gpt-4",  // Make sure this is the correct model name
                 messages: [
                     {
                         role: "system",
-                        content:
-                            "Extract the following details from the webpage content: Name, Age, Gender, Race, Date of injury resulting in death, Location of injury, Location of death, etc.",
+                        content: "Extract the following details from the webpage content: Name, Age, Gender, Race, Date of injury resulting in death, Location of injury, Location of death, etc."
                     },
                     {
                         role: "user",
-                        content: `Webpage Content: ${pageContent}`,
-                    },
+                        content: `Webpage Content: ${pageContent}`
+                    }
                 ],
                 max_tokens: 300,
-                temperature: 0.5,
+                temperature: 0.5
             },
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-                    "Content-Type": "application/json",
-                },
+                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
             }
         );
-        console.log("OpenAI API call successful");
 
-        // Extracted data from the OpenAI response
-        const extractedData = response.data.choices[0].message.content;
-        res.status(200).json({ extractedData });
+        const extractedData = openaiResponse.data.choices[0].message.content;
+        return res.status(200).json({ extractedData });
+
     } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: "An error occurred", details: error.message });
+        console.error('API Error:', error);
+        return res.status(500).json({ 
+            error: 'Server error', 
+            message: error.message 
+        });
     }
 }
