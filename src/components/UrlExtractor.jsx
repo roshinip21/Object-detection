@@ -8,7 +8,7 @@ export default function UrlExtractor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted with URL:", url);
+    // console.log("Form submitted with URL:", url);
     setError("");
     setExtractedData(null);
     setIsLoading(true);

@@ -12,16 +12,16 @@ app.use(express.json());
 
 app.post("/api/upload", async (req, res) => {
   const { url } = req.body;
-  console.log("Url is: " + url);
+  // console.log("Url is: " + url);
 
   try {
     // Fetch the content of the provided URL
-    console.log("Fetching URL content...");
+    // console.log("Fetching URL content...");
     const pageResponse = await axios.get(url);
     const pageContent = pageResponse.data;
-    console.log("URL content fetched successfully");
+    // console.log("URL content fetched successfully");
 
-    console.log("Calling OpenAI API...");
+    // console.log("Calling OpenAI API...");
     // Call the OpenAI API with the content of the webpage
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -48,7 +48,7 @@ app.post("/api/upload", async (req, res) => {
         },
       }
     );
-    console.log("OpenAI API call successful");
+    // console.log("OpenAI API call successful");
 
     // Extracted data from the OpenAI response
     const extractedData = response.data.choices[0].message.content;
