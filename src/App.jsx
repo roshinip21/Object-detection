@@ -50,7 +50,7 @@ function App() {
           textAlign: 'center',
           color: '#4b5563'
         }}>
-          <p>Built with React and OpenAI API</p>
+          <p>© 2024 Dr. Audrey Beck and Dev Shah. All rights reserved.</p>
         </div>
       </footer>
     </div>
