@@ -31,7 +31,7 @@ app.post("/api/upload", async (req, res) => {
           {
             role: "system",
             content:
-              "Extract the following details from the webpage content: Name, Age, Gender, Race, Date of injury resulting in death, Location of injury, Location of death, etc.",
+              "Extract the following details from the webpage content: Name, Age, Gender, Race, Date of injury resulting in death, Location of injury, Location of death and a brief summary",
           },
           {
             role: "user",
