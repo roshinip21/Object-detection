@@ -38,7 +38,7 @@ app.post("/api/upload", async (req, res) => {
             content: `Webpage Content: ${pageContent}`,
           },
         ],
-        max_tokens: 300,
+        max_tokens: 500,
         temperature: 0.5,
       },
       {
