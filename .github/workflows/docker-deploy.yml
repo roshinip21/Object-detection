@@ -2,14 +2,7 @@ name: Docker CI/CD
 
 on:
   push:
-    branches: [ main ]  # or your default branch
-  pull_request:
     branches: [ main ]
-
-env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  DOCKER_REPOSITORY: your-docker-username/clinical-ai-trial  # replace with your Docker repository name
 
 jobs:
   build-and-deploy:
@@ -29,14 +22,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: |
-          ${{ env.DOCKER_REPOSITORY }}:latest
-          ${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}
-    
-    - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./
+        tags: ${{ secrets.DOCKER_USERNAME }}/clinical-ai-trial:latest
