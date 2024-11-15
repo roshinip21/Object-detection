@@ -50,7 +50,7 @@ function App() {
           textAlign: 'center',
           color: '#4b5563'
         }}>
-          <p>© 2024 Dr. Audrey Beck and Dev Shah. All rights reserved.</p>
+          <p>© 2024 Dev Shah. All rights reserved.</p>
         </div>
       </footer>
     </div>
