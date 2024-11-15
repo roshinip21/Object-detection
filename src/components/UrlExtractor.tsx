@@ -110,7 +110,7 @@ export default function UrlExtractor() {
     try {
       const formData = new FormData();
       formData.append('document', file);
-
+      
       const response = await fetch("/api/upload-document", {
         method: "POST",
         body: formData,
