@@ -22,7 +22,7 @@ function App() {
             fontWeight: 'bold',
             color: '#111827'
           }}>
-            Fatal Encounters Data Extractor
+            Clinical-AI-trial Data Extractor
           </h1>
         </div>
       </header>
