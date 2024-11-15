@@ -66,8 +66,8 @@ export default function UrlExtractor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setExtractedData(null);
-    setExistingFile(null);
+    // setExtractedData(null);
+    // setExistingFile(null);
     setIsLoading(true);
 
     try {
