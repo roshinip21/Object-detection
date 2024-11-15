@@ -2,22 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/upload.js",
+      "src": "api/**/*.js",
       "use": "@vercel/node"
     },
     {
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "buildCommand": "npm run build",
-        "outputDirectory": "dist"
+        "distDir": "dist"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/upload.js"
+      "dest": "/api/$1"
     },
     {
       "handle": "filesystem"
